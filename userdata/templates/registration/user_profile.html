@@ -1,0 +1,41 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content%}
+
+<h3>Profile</h3>
+
+{% if page_user.profile_pic%}
+    <img src="{{ page_user.profile_pic.url }}" width="50" height="50" class="rounded-circle">
+{% else %}
+    <img src="{% static 'theBlog/images/index.png' %}" width="75" height="75" class="rounded-circle">
+{% endif%}
+
+<br/><br/>
+<hr>
+
+
+<p class="small text-muted">
+
+    {% if page_user.website_url %}
+        <a href="{{ page_user.website_url }}">Website</a>
+    {% endif %}
+    {% if page_user.facebook_url %}
+        <a href="{{ page_user.facebook_url }}">Facebook</a>
+    {% endif %}
+    {% if page_user.email_url %}
+        <a href="{{ page_user.email_url }}">Email</a>
+        {% endif %}
+    {% if page_user.twitter_url %}
+        <a href="{{ page_user.twitter_url }}">Twitter</a>
+    {% endif %}
+    {% if page_user.reddit_url %}
+        <a href="{{ page_user.reddit_url }}">Reddit</a>
+    {% endif %}
+
+</p>
+
+<p class="small text-muted">
+   Bio- {{page_user.bio}}
+</p>
+
+{% endblock %}

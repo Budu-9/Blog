@@ -1,0 +1,29 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content%}
+
+<h3><a href="{% url 'home' %}">Home</a></h3>
+{% if user.profile.profile_pic%}
+    <img src="{{ user.profile.profile_pic.url }}" width="50" height="50" class="rounded-circle">
+{% else %}
+    <img src="{% static 'theBlog/images/index.png' %}" width="75" height="75" class="rounded-circle">
+{% endif%}
+    <br><br>
+
+<ul>
+{% for post in object_list%}
+    <li>
+        <small><i><a href="{% url 'categories' post.category|slugify %}">{{post.category}}</a></small></i><br/>
+        <b>{{post.author}}</b>&nbsp;&nbsp;<small>{{post.post_date}}</small><br/>
+        {{post.body|slice:":80"}}<a href="{% url 'post_detail' post.pk %}">Read more</a><br/>
+        {% if post.image %}
+            <img src="{{post.image.url}}">
+        {% endif %}
+        <br>
+            <small><a href="{% url 'comment_page' post.pk %}">Comment</a></small>
+    </li>
+    <hr>
+{% endfor%}
+</ul>
+
+{% endblock %}

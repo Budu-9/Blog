@@ -1,0 +1,68 @@
+{% extends 'index.html'%}
+{% block title%}Blog details{% endblock %}
+{% block content%}
+
+<a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+<br><br>
+{% if post.author.profile.profile_pic%}
+<img src="{{post.author.profile.profile_pic.url}}" width="50" height="50" class="rounded-circle">
+{% endif %}
+<br/><br/>
+
+<br/><br>
+<h3>{{post.author}}&nbsp;&nbsp;<small>{{post.post_date}}</small></h3><br/>
+<br/>
+<b>{{post.body}}</b><br>
+{% if post.image %}
+    <img src="{{post.image.url}}">
+{% endif %}
+
+<br/><br/>
+<hr>
+<br>
+<form action="{% url 'like_post' post.pk%}" method="post">
+    {% csrf_token %}
+{% if user.is_authenticated %}
+    {% if Liked %}
+        <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-danger btn-sm">Unlike</button>
+    {% else %} 
+        <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-primary btn-sm">Like</button>
+    {% endif %}
+{% else%}
+    <small><a href="{% url 'login' %}">Login</a>Login to Like</small>
+{% endif %}
+    - {{total_likes}} Likes
+</form>
+<br><br>
+<hr>
+<h2>Comments</h2>
+{% if not post.comments.all %}
+    No comment 
+        <a href="{% url 'comment_page' post.pk %}">Add Comment</a>
+{% else %}
+
+    {% for x in post.comments.all %}
+    <b>
+        {{x.name}}-
+        {{x.date_added}}
+    </b>
+    <br><br>
+        {{x.body}}
+    <br>
+    {% endfor %}
+<a href="{% url 'comment_page' post.pk %}">Comment</a>
+<br>
+{% endif %}
+<br><br>
+<hr>
+{% if user.is_authenticated %}
+    {% if user.id == post.author.id %}
+        <a href="{% url 'post_edit' post.pk %}" class="btn btn-secondary">Edit Post</a>
+        <br/><br>
+        <a href="{% url 'delete_post' post.pk %}" class="btn btn-secondary">Delete Post</a>
+    {% endif %}    
+{% endif %}
+<br><br>
+
+{% endblock %}
+
